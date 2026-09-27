@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>实习打卡平台</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    background: #e0f7fa;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    padding: 10px;
+    overflow-x: hidden;
+  }
+
+  /* 满屏水印 */
+  .watermark {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.12;
+    transform: rotate(-25deg);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 180px);
+    align-content: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+    line-height: 2.2;
+    text-align: center;
+  }
+
+  /* 主容器 */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.95);
+    border-radius: 12px;
+    padding: 15px 10px 20px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* 标题 */
+  .header {
+    text-align: center;
+    color: #0099cc;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-size: 24px;
+    text-shadow: 1px 1px 0 #fff;
+    margin-bottom: 4px;
+  }
+  .header p {
+    font-size: 14px;
+    color: #00aadd;
+  }
+  .header .tag {
+    display: inline-block;
+    background: #66ccff;
+    color: #fff;
+    padding: 4px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-top: 6px;
+  }
+
+  /* 列表：强制5列 */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px 6px;
+  }
+
+  /* 每个列表项 */
+  .item {
+    display: flex;
+    align-items: center;
+    background: #f0faff;
+    border: 1px solid #d0f0ff;
+    border-radius: 4px;
+    padding: 4px 3px;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .item .n {
+    color: #ff6600;
+    font-weight: bold;
+    margin-right: 2px;
+    flex-shrink: 0;
+    font-size: 11px;
+  }
+  .item span:not(.n) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* 定制区域 */
+  .custom-box {
+    margin-top: 18px;
+    padding: 15px;
+    background: linear-gradient(135deg, #0099cc, #66ccff);
+    border-radius: 10px;
+    text-align: center;
+    color: #fff;
+  }
+  .custom-box h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  .custom-box p {
+    font-size: 13px;
+    opacity: 0.9;
+    margin: 4px 0;
+  }
+  .vx-highlight {
+    display: inline-block;
+    margin: 10px 0;
+    padding: 8px 20px;
+    background: #fff;
+    color: #ff6600;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 25px;
+  }
+  .tip {
+    font-size: 12px;
+    opacity: 0.85;
+  }
+
+  /* 叮当猫 */
+  .doraemon {
+    position: fixed;
+    bottom: 8px;
+    left: 8px;
+    font-size: 32px;
+    z-index: 100;
+    pointer-events: none;
+  }
+  .star {
+    position: fixed;
+    color: #ffd700;
+    z-index: 100;
+    pointer-events: none;
+  }
+  .star-1 { bottom: 45px; left: 45px; font-size: 16px; }
+  .star-2 { bottom: 20px; left: 65px; font-size: 14px; }
+
+  /* 手机端：缩小字体但保持5列 */
+  @media (max-width: 768px) {
+    body { padding: 6px; }
+    .container { padding: 10px 6px 15px; border-radius: 8px; }
+    .header h1 { font-size: 20px; }
+    .header p { font-size: 12px; }
+    .grid { gap: 3px 4px; }
+    .item { font-size: 10px; padding: 3px 2px; border-radius: 3px; }
+    .item .n { font-size: 10px; }
+    .custom-box h3 { font-size: 14px; }
+    .vx-highlight { font-size: 15px; padding: 6px 16px; }
+  }
+  @media (max-width: 480px) {
+    .item { font-size: 9px; padding: 2px 2px; }
+    .item .n { font-size: 9px; }
+    .header h1 { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 满屏水印 -->
+<div class="watermark">
+  <span>vx:360350094</span><span>vx:360350094</span><span>vx:360350094</span>
+  <span>vx:360350094</span><span>vx:360350094</span><span>vx:360350094</span>
+  <span>vx:360350094</span><span>vx:360350094</span><span>vx:360350094</span>
+  <span>vx:360350094</span><span>vx:360350094</span><span>vx:360350094</span>
+  <span>vx:360350094</span><span>vx:360350094</span><span>vx:360350094</span>
+</div>
+
+<div class="container">
+  <div class="header">
+    <h1>实习打卡</h1>
+    <p>这些平台都可以！</p>
+    <span class="tag">支持更多平台，轻松完成实习打卡</span>
+  </div>
+
+  <div class="grid">
+    <!-- 1-50 -->
+    <div class="item"><span class="n">1.</span><span>秦皇岛职业</span></div>
+    <div class="item"><span class="n">2.</span><span>智慧山电</span></div>
+    <div class="item"><span class="n">3.</span><span>广西物流职业</span></div>
+    <div class="item"><span class="n">4.</span><span>重庆公共运输</span></div>
+    <div class="item"><span class="n">5.</span><span>智慧女职</span></div>
+
+    <div class="item"><span class="n">6.</span><span>苏州百年查寝</span></div>
+    <div class="item"><span class="n">7.</span><span>新思维</span></div>
+    <div class="item"><span class="n">8.</span><span>智慧泉海查寝</span></div>
+    <div class="item"><span class="n">9.</span><span>智慧农工</span></div>
+    <div class="item"><span class="n">10.</span><span>日照航海</span></div>
+
+    <div class="item"><span class="n">11.</span><span>习讯云</span></div>
+    <div class="item"><span class="n">12.</span><span>以道书院</span></div>
+    <div class="item"><span class="n">13.</span><span>实习云</span></div>
+    <div class="item"><span class="n">14.</span><span>成学云</span></div>
+    <div class="item"><span class="n">15.</span><span>枣庄职业</span></div>
+
+    <div class="item"><span class="n">16.</span><span>柳州城市职业</span></div>
+    <div class="item"><span class="n">17.</span><span>江阳城建</span></div>
+    <div class="item"><span class="n">18.</span><span>优理方舟</span></div>
+    <div class="item"><span class="n">19.</span><span>慧职教</span></div>
+    <div class="item"><span class="n">20.</span><span>白银职业</span></div>
+
+    <div class="item"><span class="n">21.</span><span>福建卫生</span></div>
+    <div class="item"><span class="n">22.</span><span>广州生态</span></div>
+    <div class="item"><span class="n">23.</span><span>学习通打卡</span></div>
+    <div class="item"><span class="n">24.</span><span>今日校园</span></div>
+    <div class="item"><span class="n">25.</span><span>喜鹊儿</span></div>
+
+    <div class="item"><span class="n">26.</span><span>湄洲湾职业技</span></div>
+    <div class="item"><span class="n">27.</span><span>学习通课程签</span></div>
+    <div class="item"><span class="n">28.</span><span>实验实践</span></div>
+    <div class="item"><span class="n">29.</span><span>技实习</span></div>
+    <div class="item"><span class="n">30.</span><span>邵阳工业</span></div>
+
+    <div class="item"><span class="n">31.</span><span>四川机电</span></div>
+    <div class="item"><span class="n">32.</span><span>山东交通</span></div>
+    <div class="item"><span class="n">33.</span><span>湘食药职业</span></div>
+    <div class="item"><span class="n">34.</span><span>智慧正师</span></div>
+    <div class="item"><span class="n">35.</span><span>兰州科技</span></div>
+
+    <div class="item"><span class="n">36.</span><span>兰州外语</span></div>
+    <div class="item"><span class="n">37.</span><span>小北学生</span></div>
+    <div class="item"><span class="n">38.</span><span>福建幼师</span></div>
+    <div class="item"><span class="n">39.</span><span>南充文化旅游</span></div>
+    <div class="item"><span class="n">40.</span><span>福建信息</span></div>
+
+    <div class="item"><span class="n">41.</span><span>云浮医职</span></div>
+    <div class="item"><span class="n">42.</span><span>安徽林业</span></div>
+    <div class="item"><span class="n">43.</span><span>昭通学院</span></div>
+    <div class="item"><span class="n">44.</span><span>济南职业</span></div>
+    <div class="item"><span class="n">45.</span><span>重庆青年</span></div>
+
+    <div class="item"><span class="n">46.</span><span>临沂职业</span></div>
+    <div class="item"><span class="n">47.</span><span>工学云</span></div>
+    <div class="item"><span class="n">48.</span><span>C30</span></div>
+    <div class="item"><span class="n">49.</span><span>广市管理</span></div>
+    <div class="item"><span class="n">50.</span><span>长春师范</span></div>
+
+    <!-- 51-100 -->
+    <div class="item"><span class="n">51.</span><span>医学电子</span></div>
+    <div class="item"><span class="n">52.</span><span>安小信</span></div>
+    <div class="item"><span class="n">53.</span><span>完美世界校园</span></div>
+    <div class="item"><span class="n">54.</span><span>泸职院</span></div>
+    <div class="item"><span class="n">55.</span><span>抚顺职业</span></div>
+
+    <div class="item"><span class="n">56.</span><span>惠通江职</span></div>
+    <div class="item"><span class="n">57.</span><span>云南交运</span></div>
+    <div class="item"><span class="n">58.</span><span>重庆青年职院</span></div>
+    <div class="item"><span class="n">59.</span><span>新思维实习</span></div>
+    <div class="item"><span class="n">60.</span><span>呼伦贝尔学院</span></div>
+
+    <div class="item"><span class="n">61.</span><span>数智职大</span></div>
+    <div class="item"><span class="n">62.</span><span>爱在苏职大</span></div>
+    <div class="item"><span class="n">63.</span><span>兰州外语职院</span></div>
+    <div class="item"><span class="n">64.</span><span>乌职大</span></div>
+    <div class="item"><span class="n">65.</span><span>民大实习</span></div>
+
+    <div class="item"><span class="n">66.</span><span>河南交院</span></div>
+    <div class="item"><span class="n">67.</span><span>湖南汽车工程</span></div>
+    <div class="item"><span class="n">68.</span><span>锦医道</span></div>
+    <div class="item"><span class="n">69.</span><span>桂小联</span></div>
+    <div class="item"><span class="n">70.</span><span>湖南环境生物</span></div>
+
+    <div class="item"><span class="n">71.</span><span>江阳城建职业</span></div>
+    <div class="item"><span class="n">72.</span><span>云上河开</span></div>
+    <div class="item"><span class="n">73.</span><span>校企益邦</span></div>
+    <div class="item"><span class="n">74.</span><span>越沐职畅</span></div>
+    <div class="item"><span class="n">75.</span><span>柳州职教</span></div>
+
+    <div class="item"><span class="n">76.</span><span>甘肃交通</span></div>
+    <div class="item"><span class="n">77.</span><span>广东建设</span></div>
+    <div class="item"><span class="n">78.</span><span>广西职业</span></div>
+    <div class="item"><span class="n">79.</span><span>校联数科</span></div>
+    <div class="item"><span class="n">80.</span><span>i昭院</span></div>
+
+    <div class="item"><span class="n">81.</span><span>职校家园</span></div>
+    <div class="item"><span class="n">82.</span><span>校友邦</span></div>
+    <div class="item"><span class="n">83.</span><span>i水院</span></div>
+    <div class="item"><span class="n">84.</span><span>正方打卡</span></div>
+    <div class="item"><span class="n">85.</span><span>哈科职院</span></div>
+
+    <div class="item"><span class="n">86.</span><span>湖南云就业</span></div>
+    <div class="item"><span class="n">87.</span><span>酷课网</span></div>
+    <div class="item"><span class="n">88.</span><span>天府新区信息</span></div>
+    <div class="item"><span class="n">89.</span><span>广生态实习</span></div>
+    <div class="item"><span class="n">90.</span><span>接龙管家</span></div>
+
+    <div class="item"><span class="n">91.</span><span>甘肃交通职院</span></div>
+    <div class="item"><span class="n">92.</span><span>智慧正师学生</span></div>
+    <div class="item"><span class="n">93.</span><span>江西智慧教育</span></div>
+    <div class="item"><span class="n">94.</span><span>奕辅导</span></div>
+    <div class="item"><span class="n">95.</span><span>白银矿冶职院</span></div>
+
+    <div class="item"><span class="n">96.</span><span>智汇昆卫</span></div>
+    <div class="item"><span class="n">97.</span><span>群打卡</span></div>
+    <div class="item"><span class="n">98.</span><span>守实专业实践</span></div>
+    <div class="item"><span class="n">99.</span><span>菜实习</span></div>
+    <div class="item"><span class="n">100.</span><span>YN智慧校园</span></div>
+
+    <!-- 101-135 -->
+    <div class="item"><span class="n">101.</span><span>兰州科技职院</span></div>
+    <div class="item"><span class="n">102.</span><span>成学云实习实</span></div>
+    <div class="item"><span class="n">103.</span><span>铜仁学院</span></div>
+    <div class="item"><span class="n">104.</span><span>你好苏大应用</span></div>
+    <div class="item"><span class="n">105.</span><span>智慧山水</span></div>
+
+    <div class="item"><span class="n">106.</span><span>福建卫生职院</span></div>
+    <div class="item"><span class="n">107.</span><span>习行</span></div>
+    <div class="item"><span class="n">108.</span><span>正方云</span></div>
+    <div class="item"><span class="n">109.</span><span>云南技师学院</span></div>
+    <div class="item"><span class="n">110.</span><span>广东创新科技</span></div>
+
+    <div class="item"><span class="n">111.</span><span>智慧工程职院</span></div>
+    <div class="item"><span class="n">112.</span><span>广轻智慧校园</span></div>
+    <div class="item"><span class="n">113.</span><span>长春师范大学</span></div>
+    <div class="item"><span class="n">114.</span><span>福建船政交通</span></div>
+    <div class="item"><span class="n">115.</span><span>实验实践教学</span></div>
+
+    <div class="item"><span class="n">116.</span><span>乘方教务</span></div>
+    <div class="item"><span class="n">117.</span><span>云实习助理</span></div>
+    <div class="item"><span class="n">118.</span><span>智慧化教学助</span></div>
+    <div class="item"><span class="n">119.</span><span>畅享智习</span></div>
+    <div class="item"><span class="n">120.</span><span>广州华夏教育</span></div>
+
+    <div class="item"><span class="n">121.</span><span>渤海理工职院</span></div>
+    <div class="item"><span class="n">122.</span><span>石油实习</span></div>
+    <div class="item"><span class="n">123.</span><span>湖南信息职院</span></div>
+    <div class="item"><span class="n">124.</span><span>易校园</span></div>
+    <div class="item"><span class="n">125.</span><span>i警院</span></div>
+
+    <div class="item"><span class="n">126.</span><span>广西农业工程</span></div>
+    <div class="item"><span class="n">127.</span><span>博行</span></div>
+    <div class="item"><span class="n">128.</span><span>广西职院</span></div>
+    <div class="item"><span class="n">129.</span><span>辽宁医职院</span></div>
+    <div class="item"><span class="n">130.</span><span>易班</span></div>
+
+    <div class="item"><span class="n">131.</span><span>校企育才</span></div>
+    <div class="item"><span class="n">132.</span><span>校聘云</span></div>
+    <div class="item"><span class="n">133.</span><span>群报数</span></div>
+    <div class="item"><span class="n">134.</span><span>桐城师范高等专</span></div>
+    <div class="item"><span class="n">135.</span><span>广东肇庆航空职</span></div>
+  </div>
+
+  <!-- 定制区域 -->
+  <div class="custom-box">
+    <h3>📌 需要更多定制服务？</h3>
+    <p>以上平台均可支持，如需定制其他平台或有特殊需求，请联系我们</p>
+    <div class="vx-highlight">微信号：360350094</div>
+    <p class="tip">👆 长按复制微信号，添加好友即可咨询</p>
+  </div>
+</div>
+
+<div class="doraemon">🐱</div>
+<div class="star star-1">★</div>
+<div class="star star-2">★</div>
+
+</body>
+</html>
